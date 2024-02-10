@@ -1,7 +1,8 @@
-package com.west.payments.kafka.listener;
+package com.west.dispatch.kafka.listener;
 
-import com.west.payments.kafka.message.PaymentOrder;
-import com.west.payments.service.PaymentService;
+import com.west.dispatch.entity.Dispatch.DispatchStatus;
+import com.west.dispatch.kafka.message.DispatchOrder;
+import com.west.dispatch.service.DispatchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -11,9 +12,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class PaymentRequestKafkaListener {
+public class DispatchRequestKafkaListener {
 
-    private final PaymentService paymentService;
+    private final DispatchService dispatchService;
 
     @KafkaListener(
             id = "orderConsumerClient",
@@ -22,15 +23,14 @@ public class PaymentRequestKafkaListener {
             containerFactory = "kafkaListenerContainerFactory"
     )
 
-    public void receive(@Payload PaymentOrder payload) {
+    public void receive(@Payload DispatchOrder payload) {
         log.info("Kafka broker received message with payload: {}", payload);
 
-        if (payload.getPaymentStatus() == PaymentOrder.PaymentStatus.PENDING) {
-            log.info("Processing payment for order id: {}", payload.getOrderId());
-            paymentService.completePayment(payload);
+        if (payload.getDispatchStatus() == DispatchStatus.PENDING) {
+            log.info("Dispatching order id: {}", payload.getOrderId());
+            dispatchService.completeDispatch(payload);
         } else {
-            // TODO: handle alternative payment status scenarios
+            // TODO: handle alternative dispatch status scenarios
         }
     }
-
 }

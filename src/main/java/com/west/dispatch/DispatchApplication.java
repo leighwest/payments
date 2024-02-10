@@ -1,13 +1,13 @@
-package com.west.payments;
+package com.west.dispatch;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PaymentsApplication {
+public class DispatchApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PaymentsApplication.class, args);
+		SpringApplication.run(DispatchApplication.class, args);
 	}
 
 }

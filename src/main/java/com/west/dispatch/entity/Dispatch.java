@@ -1,13 +1,10 @@
-package com.west.payments.entity;
+package com.west.dispatch.entity;
 
-import com.west.payments.kafka.message.PaymentOrder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor
@@ -15,8 +12,15 @@ import java.math.BigDecimal;
 @Builder
 @Entity
 @Table
-(name = "payments")
-public class Payment {
+(name = "dispatch")
+public class Dispatch {
+
+    public enum DispatchStatus {
+        PENDING,
+        COMPLETED,
+        CANCELLED,
+        FAILED
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +30,6 @@ public class Payment {
     private Long OrderId;
 
     @Column(nullable = false)
-    private BigDecimal totalPrice;
-
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PaymentOrder.PaymentStatus paymentStatus;
+    private DispatchStatus dispatchStatus;
 }

@@ -1,10 +1,10 @@
-package com.west.payments;
+package com.west.dispatch;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PaymentsApplicationTests {
+class DispatchApplicationTests {
 
 	@Test
 	void contextLoads() {
