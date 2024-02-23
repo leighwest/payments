@@ -17,9 +17,8 @@ public class DispatchService {
     private final DispatchRepository dispatchRepository;
 
     private final DispatchEventKafkaPublisher dispatchEventKafkaPublisher;
-    private final int SLEEP_DURATION = 5000; // 5000 milliseconds (1 second)
 
-    public void completeDispatch(DispatchOrder dispatchOrder) {
+    public void completeDispatch(String key, DispatchOrder dispatchOrder) {
         Dispatch orderDispatch;
         boolean dispatchResult = simulateDispatch();
 
@@ -38,7 +37,7 @@ public class DispatchService {
         }
 
         try {
-            dispatchEventKafkaPublisher.process(convertToDispatchOrder(orderDispatch));
+            dispatchEventKafkaPublisher.process(key, convertToDispatchOrder(orderDispatch));
         } catch (Exception e) {
             log.error("Error while publishing dispatch order message with order ID {}, error: {}",
                     orderDispatch.getId(), e.getMessage());
@@ -47,6 +46,7 @@ public class DispatchService {
 
     private boolean simulateDispatch() {
         try {
+            int SLEEP_DURATION = 5000; // 5000 milliseconds (5 seconds)
             Thread.sleep(SLEEP_DURATION);
             return true;
         } catch (InterruptedException e) {

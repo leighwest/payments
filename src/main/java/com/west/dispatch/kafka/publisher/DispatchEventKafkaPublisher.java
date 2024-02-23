@@ -15,8 +15,8 @@ public class DispatchEventKafkaPublisher {
 
     private final KafkaTemplate<String, Object> kafkaProducer;
 
-    public void process(DispatchOrder dispatchOrder) throws Exception {
+    public void process(String key, DispatchOrder dispatchOrder) throws Exception {
         log.info("Sending dispatch event kafka message for order ID: {}", dispatchOrder.getOrderId());
-        kafkaProducer.send(DISPATCH_PROCESSED_TOPIC, dispatchOrder).get();
+        kafkaProducer.send(DISPATCH_PROCESSED_TOPIC, key, dispatchOrder).get();
     }
 }

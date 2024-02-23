@@ -6,6 +6,8 @@ import com.west.dispatch.service.DispatchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
@@ -23,12 +25,12 @@ public class DispatchRequestKafkaListener {
             containerFactory = "kafkaListenerContainerFactory"
     )
 
-    public void receive(@Payload DispatchOrder payload) {
+    public void receive(@Header(KafkaHeaders.RECEIVED_KEY) String key, @Payload DispatchOrder payload) {
         log.info("Kafka broker received message with payload: {}", payload);
 
         if (payload.getDispatchStatus() == DispatchStatus.PENDING) {
             log.info("Dispatching order id: {}", payload.getOrderId());
-            dispatchService.completeDispatch(payload);
+            dispatchService.completeDispatch(key, payload);
         } else {
             // TODO: handle alternative dispatch status scenarios
         }
